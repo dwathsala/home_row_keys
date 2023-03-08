@@ -1,0 +1,74 @@
+html,body{
+    margin: 0px;
+    padding: 0px;
+}
+
+.container{
+    display: flex;
+    /* background-color: aqua; */
+    justify-content: center;
+}
+
+.wrapper{
+    display: flex;
+    /* background-color: lawngreen; */
+    flex-direction: column;
+    width: 1200px;
+}
+
+.display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(206, 204, 204);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.my_name{
+    font-size: 35px;
+}
+
+.button_group{
+    display: flex;
+    margin-top: 80px;
+    justify-content: center;
+}
+
+.button{
+    display: flex;
+    font-size: 30px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgb(223, 217, 217);
+    border-radius: 25px;
+}
+
+.button_group2{
+    display: flex;
+    margin-top: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover{
+    background-color: rgb(237, 232, 232);
+}
+
+#space{
+    width: 800px;
+    height: 50px;
+  
+}
+
+
+
+
+
+
+
+
+
