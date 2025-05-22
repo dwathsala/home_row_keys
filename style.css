@@ -1,41 +1,44 @@
-html,body{
+html, body {
     margin: 0px;
     padding: 0px;
 }
 
-.container{
+.container {
     display: flex;
     /* background-color: aqua; */
     justify-content: center;
 }
 
-.wrapper{
+.wrapper {
     display: flex;
     /* background-color: lawngreen; */
     flex-direction: column;
     width: 1200px;
 }
 
-.display{
+.display {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: rgb(206, 204, 204);
     border-radius: 10px;
     margin-top: 20px;
+    height: 60px; /* Add this for consistent bar height */
+    position: relative; /* Add this for moving sentence positioning */
+    overflow: hidden; /* Add this to hide overflow */
 }
 
-.my_name{
+.my_name {
     font-size: 35px;
 }
 
-.button_group{
+.button_group {
     display: flex;
     margin-top: 80px;
     justify-content: center;
 }
 
-.button{
+.button {
     display: flex;
     font-size: 30px;
     width: 100%;
@@ -47,28 +50,27 @@ html,body{
     border-radius: 25px;
 }
 
-.button_group2{
+.button_group2 {
     display: flex;
     margin-top: 40px;
     justify-content: center;
     align-items: center;
 }
 
-.button:hover{
+.button:hover {
     background-color: rgb(237, 232, 232);
 }
 
-#space{
+#space {
     width: 800px;
     height: 50px;
-  
 }
 
-
-
-
-
-
-
-
-
+/* Add this for the moving sentence */
+.moving_sentence {
+    position: absolute;
+    right: 0;
+    white-space: nowrap;
+    font-size: 35px;
+    line-height: 1;
+}
