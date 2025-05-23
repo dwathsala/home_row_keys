@@ -1,82 +1,87 @@
-// Get the gray bar (the display bar)
 const display = document.querySelector(".display");
 const myName = document.querySelector(".my_name");
 
-// Variables
 let sentence = "";
 let gameStarted = false;
 let gameInterval = null;
 let letterInterval = null;
 const letters = ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", " "];
+let startTime = 0;
+let correctKeystrokes = 0;
+let incorrectKeystrokes = 0;
+let totalKeystrokes = 0;
+let movingSentence = null;
 
-// Start game on space bar press
 window.addEventListener("keydown", function(event) {
     if (!gameStarted && event.code === "Space") {
-        myName.textContent = ""; // Clear the content inside the bar
+        myName.textContent = "";
         startGame();
     } else if (gameStarted) {
         handleKeyPress(event);
     }
 });
 
-// Start game function
 function startGame() {
     gameStarted = true;
     sentence = "";
-    letterInterval = setInterval(addLetter, 1000); // Add a letter every second
-    gameInterval = setInterval(moveSentence, 20); // Move the sentence every 20ms (fast)
+    startTime = Date.now();
+    correctKeystrokes = 0;
+    incorrectKeystrokes = 0;
+    totalKeystrokes = 0;
+    movingSentence = document.createElement("div");
+    movingSentence.className = "moving_sentence";
+    display.appendChild(movingSentence);
+    letterInterval = setInterval(addLetter, 1000);
+    gameInterval = setInterval(moveSentence, 20);
 }
 
-// Add a letter to the sentence
 function addLetter() {
     const letter = letters[Math.floor(Math.random() * letters.length)];
-    sentence += letter === " " ? " ␣ " : " " + letter; // Add a space around the letter/symbol
+    sentence += letter === " " ? " ␣ " : " " + letter;
     updateSentence();
 }
 
-// Update the moving sentence inside the gray bar
 function updateSentence() {
-    // Remove any existing moving sentence
-    const oldMoving = display.querySelector(".moving_sentence");
-    if (oldMoving) display.removeChild(oldMoving);
-
-    // Create and add new moving sentence
-    const movingSentence = document.createElement("div");
-    movingSentence.className = "moving_sentence";
     movingSentence.textContent = sentence;
-    display.appendChild(movingSentence);
 }
 
-// Move the sentence to the left
 function moveSentence() {
-    const movingSentence = display.querySelector(".moving_sentence");
-    if (movingSentence) {
-        const currentRight = parseInt(movingSentence.style.right || "0");
-        movingSentence.style.right = (currentRight + 4) + "px"; // Move 4px left per interval (fast)
-        if (currentRight > display.offsetWidth + movingSentence.offsetWidth) {
-            endGame();
-        }
+    if (!movingSentence) return;
+    const currentTranslate = parseInt(movingSentence.style.transform?.replace(/[^-\d.]/g, '') || "0");
+    movingSentence.style.transform = `translateX(${currentTranslate - 2}px)`; // Move left by 2px each frame
+    // If the sentence moves off the left edge, end the game
+    if (-currentTranslate > movingSentence.offsetWidth + display.offsetWidth) {
+        endGame();
     }
 }
 
-// Handle key press
 function handleKeyPress(event) {
     let key = event.key.toUpperCase();
     if (key === " ") key = " ";
     const firstLetter = sentence.trim().split(/\s+/)[0];
+    totalKeystrokes++;
     if (firstLetter && (firstLetter === key || (firstLetter === "␣" && key === " "))) {
+        correctKeystrokes++;
         sentence = sentence.replace(/^\s*␣\s*/, "").replace(/^\s*[A-Z;]\s*/, "");
         updateSentence();
+    } else {
+        incorrectKeystrokes++;
     }
 }
 
-// End game function
+function showStats() {
+    const timeElapsed = (Date.now() - startTime) / 1000;
+    const wpm = Math.round((correctKeystrokes / 5) / (timeElapsed / 60));
+    const accuracy = Math.round((correctKeystrokes / totalKeystrokes) * 100) || 0;
+    myName.textContent = `WPM: ${wpm} | Accuracy: ${accuracy}%`;
+}
+
 function endGame() {
     clearInterval(letterInterval);
     clearInterval(gameInterval);
     gameStarted = false;
-    myName.textContent = "Game Over! Press Space Bar to Restart.";
+    showStats();
     sentence = "";
-    const movingSentence = display.querySelector(".moving_sentence");
     if (movingSentence) display.removeChild(movingSentence);
+    movingSentence = null;
 }
